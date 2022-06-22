@@ -71,6 +71,7 @@ export function usePaginatedAPI(apiCallback) {
             return;
           }
 
+          console.log(!!response.meta.next_cursor);
           setState(curState => ({
             ...curState,
             isLoading: false,

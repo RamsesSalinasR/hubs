@@ -34,6 +34,7 @@ export function Header({
             <li>
               <a href="/" className={styles.homeLink}>
                 <img alt={appName} src={appLogo} />
+                <p>Hello World</p>
               </a>
             </li>
             {enableSpoke && (
