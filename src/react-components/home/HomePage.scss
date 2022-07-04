@@ -180,10 +180,9 @@
 }
 
 :local(.home-page) :local(.card) {
-  background-color: theme.$background2-color;
+  // background-color: theme.$background2-color;
   border-radius: 16px;
   font-weight: theme.$font-weight-medium;
-  padding-bottom: 32px !important;
   flex: 1;
 }
 
@@ -192,4 +191,9 @@
     text-align: center;
     align-items: center;
   }
+}
+
+// custom
+img{
+  width: 100%;
 }
