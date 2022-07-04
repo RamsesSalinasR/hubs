@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import classNames from "classnames";
 import configs from "../../utils/configs";
@@ -25,6 +25,8 @@ import { ReactComponent as HmcLogo } from "../icons/HmcLogo.svg";
 export function HomePage() {
   const auth = useContext(AuthContext);
   const intl = useIntl();
+  // TEST IMAGES
+  const [images, setImages] = useState([]);
 
   const { results: favoriteRooms } = useFavoriteRooms();
   const { results: publicRooms } = usePublicRooms();
@@ -33,6 +35,14 @@ export function HomePage() {
   const sortedPublicRooms = Array.from(publicRooms).sort((a, b) => b.member_count - a.member_count);
   const wrapInBold = chunk => <b>{chunk}</b>;
   const isHmc = configs.feature("show_cloud");
+
+  // TEST PETICION LANDING IMAGES
+  const fetchImages = async () => {
+    const fetching = await fetch("https://adminhubs.herokuapp.com/api/landing");
+    const json = await fetching.json();
+    return json;
+  };
+
   useEffect(() => {
     const qs = new URLSearchParams(location.search);
 
@@ -50,6 +60,11 @@ export function HomePage() {
     if (qs.has("new")) {
       createAndRedirectToNewHub(null, null, true);
     }
+
+    // TEST IMAGES
+    fetchImages().then(res => {
+      setImages(res);
+    });
   }, []);
 
   const canCreateRooms = !configs.feature("disable_room_creation") || auth.isAdmin;
@@ -92,24 +107,24 @@ export function HomePage() {
                 { id: "home-page.hero-image-alt", defaultMessage: "Screenshot of {appName}" },
                 { appName: configs.translation("app-name") }
               )} // src={configs.image("home_background")}
-              src="https://source.unsplash.com/user/c_v_r"
+              src={images[0]?.url}
             />
           </div>
         </div>
       </Container>
-      {configs.feature("show_feature_panels") && (
-        <Container className={classNames(styles.features, styles.colLg, styles.centerLg)}>
-          <Column padding gap="xl" className={styles.card}>
-            <img src="https://source.unsplash.com/user/c_v_r" />
-          </Column>
-          <Column padding gap="xl" className={styles.card}>
-            <img src="https://source.unsplash.com/user/c_v_r" />
-          </Column>
-          <Column padding gap="xl" className={styles.card}>
-            <img src="https://source.unsplash.com/user/c_v_r" />
-          </Column>
-        </Container>
-      )}
+      {/* {configs.feature("show_feature_panels") && ( */}
+      <Container className={classNames(styles.features, styles.colLg, styles.centerLg)}>
+        <Column padding gap="xl" className={styles.card}>
+          <img src={images[0]?.url} />
+        </Column>
+        <Column padding gap="xl" className={styles.card}>
+          <img src={images[0]?.url} />
+        </Column>
+        <Column padding gap="xl" className={styles.card}>
+          <img src={images[0]?.url} />
+        </Column>
+      </Container>
+      {/* )} */}
       {sortedPublicRooms.length > 0 && (
         <Container className={styles.roomsContainer}>
           <h3 className={styles.roomsHeading}>
